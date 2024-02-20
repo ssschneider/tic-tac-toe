@@ -1,7 +1,14 @@
+import { useState } from "react";
 import { GameBoard } from "./components/Gameboard";
 import { Player } from "./components/Player";
 
 function App() {
+  const [ activePlayer, setActivePlayer ] = useState("X");
+
+  function handlePlayerSwitch () {
+    setActivePlayer(currentlyActivePlayer => currentlyActivePlayer === "X" ? "O" : "X");
+  };
+
 	return (
     <>
       <header>
@@ -11,13 +18,13 @@ function App() {
       <main>
         <div id="game-container">
           {/* PLAYERS */}
-          <ol id="players">
-            <Player playerName="Player 01" symbol="X" />
-            <Player playerName="Player 02" symbol="O" />
+          <ol id="players" className="highlight-player" >
+            <Player playerName="Player 01" symbol="X" isActive={activePlayer === "X"} />
+            <Player playerName="Player 02" symbol="O" isActive={activePlayer === "O"}/>
           </ol>
           
           {/* GAME BOARD */}
-          <GameBoard />
+          <GameBoard onPlayerSwitch={handlePlayerSwitch} activePlayer={activePlayer} />
         </div>
 
         {/* GAME LOG */}
