@@ -1,12 +1,33 @@
 import { useState } from "react";
 import { GameBoard } from "./components/Gameboard";
 import { Player } from "./components/Player";
+import { PlayLog } from "./components/Log";
 
 function App() {
   const [ activePlayer, setActivePlayer ] = useState("X");
+  const [ gameLog, setGameLog ] = useState([]);
 
-  function handlePlayerSwitch () {
+  function handlePlayerSwitch (rowIndex, columnIndex) {
     setActivePlayer(currentlyActivePlayer => currentlyActivePlayer === "X" ? "O" : "X");
+    setGameLog(prevGameLog => {
+      let currentPlayer = "X";
+
+      if (prevGameLog.length > 0 && prevGameLog[0].player === "X") {
+          currentPlayer = "O"
+      };
+
+      const updatedGameLog = [
+        { square: {
+            row: rowIndex,
+            column: columnIndex
+          }, player: currentPlayer
+        } 
+        ,...prevGameLog
+      ];
+
+      return updatedGameLog;
+    });
+
   };
 
 	return (
@@ -24,11 +45,11 @@ function App() {
           </ol>
           
           {/* GAME BOARD */}
-          <GameBoard onPlayerSwitch={handlePlayerSwitch} activePlayer={activePlayer} />
+          <GameBoard onPlayerSwitch={handlePlayerSwitch} plays={gameLog} />
         </div>
 
         {/* GAME LOG */}
-
+        <PlayLog gameLog={gameLog} />
       </main>
     </>
 	);
