@@ -19,7 +19,12 @@ export function GameBoard ({onPlayerSwitch, plays}) {
             {gameBoard.map((boardRow, rowIndex) => <li key={rowIndex}>
                 <ol>
                     {boardRow.map((playerSymbol, columnIndex) => <li key={columnIndex}>
-                        <button onClick={() =>onPlayerSwitch(rowIndex, columnIndex)}>{playerSymbol}</button>
+                        <button 
+                            onClick={() =>onPlayerSwitch(rowIndex, columnIndex)}
+                            disabled={playerSymbol !== null}
+                        >
+                            {playerSymbol}
+                        </button>
                     </li>
                     )}
                 </ol>
