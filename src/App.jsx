@@ -6,14 +6,14 @@ import { WINNING_COMBINATIONS } from "./components/winning-combination";
 import { GameOver } from "./components/GameOver";
 
 const PLAYERS = {
-  X: "Player 01",
-  O: "Player 02"
+	X: "Player 01",
+	O: "Player 02",
 };
 
 const INITIAL_GAME_BOARD = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null], 
+	[null, null, null],
+	[null, null, null],
+	[null, null, null],
 ];
 
 function deriveActivePlayer(gameLog) {
@@ -24,59 +24,62 @@ function deriveActivePlayer(gameLog) {
 	}
 
 	return activePlayer;
-};
+}
 
-function deriveWinner (gameBoard, players) {
-  let winner;
+function deriveWinner(gameBoard, players) {
+	let winner;
 
-  for (const combination of WINNING_COMBINATIONS) {
-    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
-    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
-    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+	for (const combination of WINNING_COMBINATIONS) {
+		const firstSquareSymbol =
+			gameBoard[combination[0].row][combination[0].column];
+		const secondSquareSymbol =
+			gameBoard[combination[1].row][combination[1].column];
+		const thirdSquareSymbol =
+			gameBoard[combination[2].row][combination[2].column];
 
-    if (
-        firstSquareSymbol && 
-        firstSquareSymbol === secondSquareSymbol && 
-        firstSquareSymbol === thirdSquareSymbol
-    ) {
-      winner = players[firstSquareSymbol];
-    }
-  };
+		if (
+			firstSquareSymbol &&
+			firstSquareSymbol === secondSquareSymbol &&
+			firstSquareSymbol === thirdSquareSymbol
+		) {
+			winner = players[firstSquareSymbol];
+		}
+	}
 
-  return winner;
-};
+	return winner;
+}
 
-function deriveGameboard (gameLog) {
-  let gameBoard = [...INITIAL_GAME_BOARD.map(innerArray => [...innerArray])];
+function deriveGameboard(gameLog) {
+	let gameBoard = [...INITIAL_GAME_BOARD.map(innerArray => [...innerArray])];
 
-    for (const play of gameLog) {
-        const {square, player } = play;
-        const { row, column } = square;
+	for (const play of gameLog) {
+		const { square, player } = play;
+		const { row, column } = square;
 
-        gameBoard[row][column] = player;
-    };
+		gameBoard[row][column] = player;
+	}
 
-    return gameBoard;
-};
+	return gameBoard;
+}
 
 function App() {
 	const [gameLog, setGameLog] = useState([]);
-  const [ players, setPlayers ] = useState(PLAYERS);
+	const [players, setPlayers] = useState(PLAYERS);
 
-  // CHECK ACTIVE PLAYER
+	// CHECK ACTIVE PLAYER
 	const activePlayer = deriveActivePlayer(gameLog);
 
-  //GAMEBOARD
-  const gameBoard = deriveGameboard(gameLog);
+	//GAMEBOARD
+	const gameBoard = deriveGameboard(gameLog);
 
-  //CHECKING FOR A WINNER OR A DRAW
-  const winner = deriveWinner(gameBoard, players);
-  const isADraw = Boolean(gameLog.length === 9 & !winner);
+	//CHECKING FOR A WINNER OR A DRAW
+	const winner = deriveWinner(gameBoard, players);
+	const isADraw = Boolean((gameLog.length === 9) & !winner);
 
-  // RESET THE GAME
-  function handleResetGame () {
-    setGameLog([]);
-  };
+	// RESET THE GAME
+	function handleResetGame() {
+		setGameLog([]);
+	}
 
 	function handlePlayerSwitch(rowIndex, columnIndex) {
 		setGameLog(prevGameLog => {
@@ -95,17 +98,17 @@ function App() {
 
 			return updatedGameLog;
 		});
-	};
+	}
 
-  // HANDLE PLAYERS NAMES FOR BETTER UX
-  function handlePlayerNameChange (symbol, newName) {
-    setPlayers(prevPlayers => {
-      return {
-        ...prevPlayers,
-        [symbol]: newName
-      };
-    });
-  };
+	// HANDLE PLAYERS NAMES FOR BETTER UX
+	function handlePlayerNameChange(symbol, newName) {
+		setPlayers(prevPlayers => {
+			return {
+				...prevPlayers,
+				[symbol]: newName,
+			};
+		});
+	}
 
 	return (
 		<>
@@ -121,18 +124,23 @@ function App() {
 							playerName={PLAYERS.X}
 							symbol="X"
 							isActive={activePlayer === "X"}
-              updatePlayerName={handlePlayerNameChange}
+							updatePlayerName={handlePlayerNameChange}
 						/>
 						<Player
 							playerName={PLAYERS.O}
 							symbol="O"
 							isActive={activePlayer === "O"}
-              updatePlayerName={handlePlayerNameChange}
+							updatePlayerName={handlePlayerNameChange}
 						/>
 					</ol>
 
-          {/* WINNING MESSAGE */}
-          {(winner || isADraw) && <GameOver winner={winner} onResetGame={handleResetGame} /> }
+					{/* WINNING MESSAGE */}
+					{(winner || isADraw) && (
+						<GameOver
+							winner={winner}
+							onResetGame={handleResetGame}
+						/>
+					)}
 
 					{/* GAME BOARD */}
 					<GameBoard
@@ -146,6 +154,6 @@ function App() {
 			</main>
 		</>
 	);
-};
+}
 
 export default App;
