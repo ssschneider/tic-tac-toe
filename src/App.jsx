@@ -23,6 +23,10 @@ const initialGameBoard = [
 
 function App() {
 	const [gameLog, setGameLog] = useState([]);
+  const [ players, setPlayers ] = useState(
+    { "X": "Player 01"},
+    { "O": "Player 02"},
+  );
 
 	const activePlayer = deriveActivePlayer(gameLog);
 
@@ -49,7 +53,7 @@ function App() {
         firstSquareSymbol === secondSquareSymbol && 
         firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   };
 
@@ -79,6 +83,16 @@ function App() {
 		});
 	};
 
+  // HANDLE PLAYERS NAMES FOR BETTER UX
+  function handlePlayerNameChange (symbol, newName) {
+    setPlayers(prevPlayers => {
+      return {
+        ...prevPlayers,
+        [symbol]: newName
+      };
+    });
+  };
+
 	return (
 		<>
 			<header>
@@ -93,11 +107,13 @@ function App() {
 							playerName="Player 01"
 							symbol="X"
 							isActive={activePlayer === "X"}
+              updatePlayerName={handlePlayerNameChange}
 						/>
 						<Player
 							playerName="Player 02"
 							symbol="O"
 							isActive={activePlayer === "O"}
+              updatePlayerName={handlePlayerNameChange}
 						/>
 					</ol>
 
