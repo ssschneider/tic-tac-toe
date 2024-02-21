@@ -3,6 +3,7 @@ import { GameBoard } from "./components/Gameboard";
 import { Player } from "./components/Player";
 import { PlayLog } from "./components/Log";
 import { WINNING_COMBINATIONS } from "./components/winning-combination";
+import { GameOver } from "./components/GameOver";
 
 function deriveActivePlayer(gameLog) {
 	let activePlayer = "X";
@@ -52,6 +53,8 @@ function App() {
     }
   };
 
+  const isADraw = Boolean(gameLog.length === 9 & !winner);
+
 	function handlePlayerSwitch(rowIndex, columnIndex) {
 		setGameLog(prevGameLog => {
 			const currentPlayer = deriveActivePlayer(prevGameLog);
@@ -69,7 +72,7 @@ function App() {
 
 			return updatedGameLog;
 		});
-	}
+	};
 
 	return (
 		<>
@@ -94,7 +97,7 @@ function App() {
 					</ol>
 
           {/* WINNING MESSAGE */}
-          {winner && <p> You won, {winner}! </p>}
+          {(winner || isADraw) && <GameOver winner={winner} /> }
 
 					{/* GAME BOARD */}
 					<GameBoard
