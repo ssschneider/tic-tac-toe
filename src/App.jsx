@@ -5,6 +5,17 @@ import { PlayLog } from "./components/Log";
 import { WINNING_COMBINATIONS } from "./components/winning-combination";
 import { GameOver } from "./components/GameOver";
 
+const PLAYERS = {
+  X: "Player 01",
+  O: "Player 02"
+};
+
+const INITIAL_GAME_BOARD = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null], 
+];
+
 function deriveActivePlayer(gameLog) {
 	let activePlayer = "X";
 
@@ -35,23 +46,8 @@ function deriveWinner (gameBoard, players) {
   return winner;
 };
 
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null], 
-];
-
-function App() {
-	const [gameLog, setGameLog] = useState([]);
-  const [ players, setPlayers ] = useState(
-    { "X": "Player 01"},
-    { "O": "Player 02"},
-  );
-
-	const activePlayer = deriveActivePlayer(gameLog);
-
-  //GAMEBOARD
-  let gameBoard = [...initialGameBoard.map(innerArray => [...innerArray])];
+function deriveGameboard (gameLog) {
+  let gameBoard = [...INITIAL_GAME_BOARD.map(innerArray => [...innerArray])];
 
     for (const play of gameLog) {
         const {square, player } = play;
@@ -59,6 +55,19 @@ function App() {
 
         gameBoard[row][column] = player;
     };
+
+    return gameBoard;
+};
+
+function App() {
+	const [gameLog, setGameLog] = useState([]);
+  const [ players, setPlayers ] = useState(PLAYERS);
+
+  // CHECK ACTIVE PLAYER
+	const activePlayer = deriveActivePlayer(gameLog);
+
+  //GAMEBOARD
+  const gameBoard = deriveGameboard(gameLog);
 
   //CHECKING FOR A WINNER OR A DRAW
   const winner = deriveWinner(gameBoard, players);
@@ -109,13 +118,13 @@ function App() {
 					{/* PLAYERS */}
 					<ol id="players" className="highlight-player">
 						<Player
-							playerName="Player 01"
+							playerName={PLAYERS.X}
 							symbol="X"
 							isActive={activePlayer === "X"}
               updatePlayerName={handlePlayerNameChange}
 						/>
 						<Player
-							playerName="Player 02"
+							playerName={PLAYERS.O}
 							symbol="O"
 							isActive={activePlayer === "O"}
               updatePlayerName={handlePlayerNameChange}
