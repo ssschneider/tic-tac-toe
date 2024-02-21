@@ -100,7 +100,8 @@ function App() {
 		});
 	}
 
-	// HANDLE PLAYERS NAMES FOR BETTER UX
+	// HANDLE PLAYERS NAMES FOR BETTER UXTic-Tac-Toe Logo
+	
 	function handlePlayerNameChange(symbol, newName) {
 		setPlayers(prevPlayers => {
 			return {
@@ -150,7 +151,7 @@ function App() {
 				</div>
 
 				{/* GAME LOG */}
-				<PlayLog gameLog={gameLog} />
+				<PlayLog gameLog={gameLog} playerName={players} />
 			</main>
 		</>
 	);
