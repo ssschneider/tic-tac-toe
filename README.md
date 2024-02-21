@@ -2,7 +2,10 @@
 
 <p align="center">
 Tic Tac Toe is an application developed during the React - The Complete Guide 2024 (incl. React Router and Redux), provided Academind by Maximilian Schwarzmüller, a course that I'm studying for a even better React comprehension and knowledge. <br/><br/>
-For this project we took a Deep Dive into React Concepts, such as:
+</p>
+
+<p align="left">For this project we took a Deep Dive into React Concepts, such as:
+
 - Fragments
 - How to Split Components
 - Forwarding Props
