@@ -27,7 +27,7 @@ function App() {
 	const activePlayer = deriveActivePlayer(gameLog);
 
   //GAMEBOARD
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map(innerArray => [...innerArray])];
 
     for (const play of gameLog) {
         const {square, player } = play;
@@ -54,6 +54,11 @@ function App() {
   };
 
   const isADraw = Boolean(gameLog.length === 9 & !winner);
+
+  // RESET THE GAME
+  function handleResetGame () {
+    setGameLog([]);
+  };
 
 	function handlePlayerSwitch(rowIndex, columnIndex) {
 		setGameLog(prevGameLog => {
@@ -97,7 +102,7 @@ function App() {
 					</ol>
 
           {/* WINNING MESSAGE */}
-          {(winner || isADraw) && <GameOver winner={winner} /> }
+          {(winner || isADraw) && <GameOver winner={winner} onResetGame={handleResetGame} /> }
 
 					{/* GAME BOARD */}
 					<GameBoard
