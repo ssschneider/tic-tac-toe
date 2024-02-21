@@ -11,7 +11,7 @@ function deriveActivePlayer(gameLog) {
 	}
 
 	return activePlayer;
-}
+};
 
 function App() {
 	const [gameLog, setGameLog] = useState([]);
