@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GameBoard } from "./components/Gameboard";
 import { Player } from "./components/Player";
 import { PlayLog } from "./components/Log";
+import { WINNING_COMBINATIONS } from "./components/winning-combination";
 
 function deriveActivePlayer(gameLog) {
 	let activePlayer = "X";
@@ -13,10 +14,43 @@ function deriveActivePlayer(gameLog) {
 	return activePlayer;
 };
 
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null], 
+];
+
 function App() {
 	const [gameLog, setGameLog] = useState([]);
 
 	const activePlayer = deriveActivePlayer(gameLog);
+
+  //GAMEBOARD
+  let gameBoard = initialGameBoard;
+
+    for (const play of gameLog) {
+        const {square, player } = play;
+        const { row, column } = square;
+
+        gameBoard[row][column] = player;
+    };
+
+  //CHECKING FOR A WINNER
+  let winner;
+
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+
+    if (
+        firstSquareSymbol && 
+        firstSquareSymbol === secondSquareSymbol && 
+        firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = firstSquareSymbol;
+    }
+  };
 
 	function handlePlayerSwitch(rowIndex, columnIndex) {
 		setGameLog(prevGameLog => {
@@ -59,10 +93,13 @@ function App() {
 						/>
 					</ol>
 
+          {/* WINNING MESSAGE */}
+          {winner && <p> You won, {winner}! </p>}
+
 					{/* GAME BOARD */}
 					<GameBoard
 						onPlayerSwitch={handlePlayerSwitch}
-						plays={gameLog}
+						board={gameBoard}
 					/>
 				</div>
 
@@ -71,6 +108,6 @@ function App() {
 			</main>
 		</>
 	);
-}
+};
 
 export default App;
