@@ -15,6 +15,26 @@ function deriveActivePlayer(gameLog) {
 	return activePlayer;
 };
 
+function deriveWinner (gameBoard, players) {
+  let winner;
+
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+
+    if (
+        firstSquareSymbol && 
+        firstSquareSymbol === secondSquareSymbol && 
+        firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = players[firstSquareSymbol];
+    }
+  };
+
+  return winner;
+};
+
 const initialGameBoard = [
   [null, null, null],
   [null, null, null],
@@ -40,23 +60,8 @@ function App() {
         gameBoard[row][column] = player;
     };
 
-  //CHECKING FOR A WINNER
-  let winner;
-
-  for (const combination of WINNING_COMBINATIONS) {
-    const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
-    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
-    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
-
-    if (
-        firstSquareSymbol && 
-        firstSquareSymbol === secondSquareSymbol && 
-        firstSquareSymbol === thirdSquareSymbol
-    ) {
-      winner = players[firstSquareSymbol];
-    }
-  };
-
+  //CHECKING FOR A WINNER OR A DRAW
+  const winner = deriveWinner(gameBoard, players);
   const isADraw = Boolean(gameLog.length === 9 & !winner);
 
   // RESET THE GAME
